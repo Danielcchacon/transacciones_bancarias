@@ -1,0 +1,59 @@
+--base de datos: transacciones_bancarias
+
+--Crea la tabla sec_users
+CREATE TABLE  sec_users (
+    login varchar(255)not null,
+    pswd varchar(255)not null,
+    name varchar(255)null,
+    email varchar(64)null,
+    active varchar(1)null,
+    activation_code vrchar(32)null,
+    priv_admin varchar(1)null,
+    mfa varchar(255)null,
+    picture image null,
+    documento varchar(50)not null,
+    id int identity primary key
+)
+
+
+-- Crea la tabla Cuentas_Bancarias
+CREATE TABLE Cuentas_Bancarias (
+    id_cuenta INT PRIMARY KEY,
+    numero_cuenta VARCHAR(20),
+    tipo_cuenta VARCHAR(50),
+    saldo DECIMAL(10, 2),
+    id_usuario INT FOREIGN KEY REFERENCES sec_users(id)
+)
+
+CREATE TABLE Tipo_Cuenta_Bancaria (
+    id_tipo_cuenta INT IDENTITY PRIMARY KEY,
+    nombre varchar(20),
+    descripcion VARCHAR(50)
+)
+
+-- Crea la tabla Tipo_Transaccion
+CREATE TABLE Tipo_Transaccion (
+    id_tipo_transaccion INT PRIMARY KEY,
+    nombre_tipo_transaccion VARCHAR(50),
+    descripcion_tipo_transaccion VARCHAR(100)
+)
+
+-- Crea la tabla Transacciones
+CREATE TABLE Transacciones (
+    id_transaccion INT PRIMARY KEY,
+    fecha DATETIME,
+    monto DECIMAL(10, 2),
+    id_cuenta_origen INT FOREIGN KEY REFERENCES Cuentas_Bancarias(id_cuenta),
+    id_cuenta_destino INT FOREIGN KEY REFERENCES Cuentas_Bancarias(id_cuenta),
+    id_tipo_transaccion INT FOREIGN KEY REFERENCES Tipo_Transaccion(id_tipo_transaccion)
+)
+
+--Crear la tabla Transacciones fallidas
+CREATE TABLE transacciones_fallidas(
+    fecha datetime null,
+    tipo_error varchar(200)null,
+    cuenta_origen varchar(20)null
+    cuenta_destino varchar(20)null
+)
+
+
